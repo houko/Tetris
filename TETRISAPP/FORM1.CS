@@ -1,15 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Diagnostics;
-using youxi;
 using System.IO;
+using System.Windows.Forms;
 
-namespace youxiApp
+namespace TetrisApp
 {
     public partial class Form1 : Form
     {
@@ -103,9 +97,9 @@ namespace youxiApp
 
         private void keyBoardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("×óÒÆ: Left¡¢A\r\nÓÒÒÆ: Right¡¢D\r\n" +
-                "ÏÂÒÆ: Down¡¢S\r\n±ä»»: Up¡¢W\r\n±ä»¯2: Back¡¢F\r\nÖ±ÏÂ: Space¡¢J¡¢Enter",
-                "°´¼üËµÃ÷");
+            MessageBox.Show("å·¦ç§»: Leftã€A\r\nå³ç§»: Rightã€D\r\n" +
+                "ä¸‹ç§»: Downã€S\r\nå˜æ¢: Upã€W\r\nå˜åŒ–2: Backã€F\r\nç›´ä¸‹: Spaceã€Jã€Enter",
+                "æŒ‰é”®è¯´æ˜");
         }
 
         private void blogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -115,8 +109,8 @@ namespace youxiApp
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("¶íÂŞË¹·½¿é\r\nÉè¼Æ: ÂäÑ©·É»¨\r\n" +
-                "ÈÕÆÚ: 2008-04-24\r\nÁªÏµ: guanxijing@126.com", "¹ØÓÚ±¾³ÌĞò");
+            MessageBox.Show("ä¿„ç½—æ–¯æ–¹å—\r\nè®¾è®¡: è½é›ªé£èŠ±\r\n" +
+                "æ—¥æœŸ: 2008-04-24\r\nè”ç³»: guanxijing@126.com", "å…³äºæœ¬ç¨‹åº");
         }
 
         private void style1ToolStripMenuItem_Click(object sender, EventArgs e)

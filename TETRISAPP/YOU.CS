@@ -1,98 +1,94 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
-using System.Data;
 using System.Drawing;
-using System.ComponentModel;
-using System.Threading;
-using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
-namespace youxi
+namespace TetrisApp
 {
    
     public class youxiControl : Control
     {
-        #region Ë½ÓĞ×Ö¶Î
-        private const int rowCount = 21; // ĞĞÊı
-        private const int colCount = 11; // ÁĞÊı
-        private int brickWidth = 16; // Ğ¡¿é¿í¶È
-        private int brickHeight = 16; // Ğ¡¿é¸ß¶È
-        private ImageList imageList; // ·½¿éËØ²Ä
-        private Bitmap backBitmap; // ±³¾°Í¼Æ¬
-        private List<List<List<Point>>> brickTemplets = new List<List<List<Point>>>(); // ·½¿éÄ£°å[Ä£°åĞòºÅ£¬³¯Ïò]
-        private byte[,] points = new byte[colCount, rowCount]; // µãÕó
-        private byte brickIndex = 0; // Ä£°åĞòºÅ
-        private byte facingIndex = 0; // µ±Ç°±ä»¯ºÅ
-        private Point brickPoint = new Point(); // ·½¿éµÄÎ»×Ó
-        private byte afterBrickIndex = 0; // ÏÂÒ»¸öÄ£°åĞòºÅ
-        private byte afterFacingIndex = 0; // ÏÂÒ»¸ö±ä»¯ºÅ
-        private System.Windows.Forms.Timer timer; // ¿ØÖÆÏÂÂäµÄÊ±¼äÆ÷
-        private int lines; // ÏûĞĞÊı
-        private Random random = new Random(); // Ëæ¼´Êı
-        private int level = 0; // µ±Ç°ËÙ¶È
-        private int score = 0; // ³É¼¨
+        #region ç§æœ‰å­—æ®µ
+        private const int rowCount = 21; // è¡Œæ•°
+        private const int colCount = 11; // åˆ—æ•°
+        private int brickWidth = 16; // å°å—å®½åº¦
+        private int brickHeight = 16; // å°å—é«˜åº¦
+        private ImageList imageList; // æ–¹å—ç´ æ
+        private Bitmap backBitmap; // èƒŒæ™¯å›¾ç‰‡
+        private List<List<List<Point>>> brickTemplets = new List<List<List<Point>>>(); // æ–¹å—æ¨¡æ¿[æ¨¡æ¿åºå·ï¼Œæœå‘]
+        private byte[,] points = new byte[colCount, rowCount]; // ç‚¹é˜µ
+        private byte brickIndex = 0; // æ¨¡æ¿åºå·
+        private byte facingIndex = 0; // å½“å‰å˜åŒ–å·
+        private Point brickPoint = new Point(); // æ–¹å—çš„ä½å­
+        private byte afterBrickIndex = 0; // ä¸‹ä¸€ä¸ªæ¨¡æ¿åºå·
+        private byte afterFacingIndex = 0; // ä¸‹ä¸€ä¸ªå˜åŒ–å·
+        private System.Windows.Forms.Timer timer; // æ§åˆ¶ä¸‹è½çš„æ—¶é—´å™¨
+        private int lines; // æ¶ˆè¡Œæ•°
+        private Random random = new Random(); // éšå³æ•°
+        private int level = 0; // å½“å‰é€Ÿåº¦
+        private int score = 0; // æˆç»©
         /// <summary>
-        /// ÏÂÂäËÙ¶È£¬ÊıÖµ±íÊ¾Ã¿´ÎÏÂÂäµÄÊ±¼ä²î£¬ÒÔºÁÃëÎªµ¥Î»
+        /// ä¸‹è½é€Ÿåº¦ï¼Œæ•°å€¼è¡¨ç¤ºæ¯æ¬¡ä¸‹è½çš„æ—¶é—´å·®ï¼Œä»¥æ¯«ç§’ä¸ºå•ä½
         /// </summary>
         private int[] speeds = new int[] { 700, 500, 400, 300, 200, 200, 100, 80, 70, 60, 50 };
         /// <summary>
-        /// Ã¿´ÎÏû³ıĞĞËùÔö¼ÓµÄ»ı·Ö
+        /// æ¯æ¬¡æ¶ˆé™¤è¡Œæ‰€å¢åŠ çš„ç§¯åˆ†
         /// </summary>
         private int[] scoress = new int[] { 0001, 0100, 0300, 0500, 1000, 2000 };
-        private bool playing = false; // Íæ¼ÒÊÇ·ñÕıÔÚÓÎÏ·
-        private youxiNext youxiNext; // ÏÂÒ»¸ö·½¿éµÄÏÔÊ¾¿Ø¼ş
-        private youxiScore youxiScore; // »ı·ÖÏÔÊ¾¿Ø¼ş
-        private int stepIndex = -1; // µ±Ç°»Ø·ÅµÄ²½Êı
-        private bool reviewing = false; // ÊÇ·ñÕıÔÚ»Ø·ÅÖĞ
-        private Thread threadReview = null; // »Ø·ÅÊ¹ÓÃµÄÏß³Ì
-        private int reviewSpeed = 1; // »Ø·ÅµÄËÙ¶È£¬ÊıÖµ±íÊ¾±¶Êı
-        private List<StepInfo> StepInfos = new List<StepInfo>(); // ¼ÇÂ¼Íæ¼ÒÃ¿Ò»²½µÄ²Ù×÷
-        private int lastRecordTime = 0; // ×îºó¼ÇÂ¼µÄÊ±¼ä
-        private bool recordMode = false; // ÊÇ·ñ²ÉÓÃ¼ÇÂ¼Ä£Ê½
-        private ProgressBar progressBar; // »Ø·Å½ø¶ÈÌõ
-        private bool extended = false; // À©Õ¹·½¿é
-        #endregion Ë½ÓĞ×Ö¶Î
+        private bool playing = false; // ç©å®¶æ˜¯å¦æ­£åœ¨æ¸¸æˆ
+        private youxiNext youxiNext; // ä¸‹ä¸€ä¸ªæ–¹å—çš„æ˜¾ç¤ºæ§ä»¶
+        private youxiScore youxiScore; // ç§¯åˆ†æ˜¾ç¤ºæ§ä»¶
+        private int stepIndex = -1; // å½“å‰å›æ”¾çš„æ­¥æ•°
+        private bool reviewing = false; // æ˜¯å¦æ­£åœ¨å›æ”¾ä¸­
+        private Thread threadReview = null; // å›æ”¾ä½¿ç”¨çš„çº¿ç¨‹
+        private int reviewSpeed = 1; // å›æ”¾çš„é€Ÿåº¦ï¼Œæ•°å€¼è¡¨ç¤ºå€æ•°
+        private List<StepInfo> StepInfos = new List<StepInfo>(); // è®°å½•ç©å®¶æ¯ä¸€æ­¥çš„æ“ä½œ
+        private int lastRecordTime = 0; // æœ€åè®°å½•çš„æ—¶é—´
+        private bool recordMode = false; // æ˜¯å¦é‡‡ç”¨è®°å½•æ¨¡å¼
+        private ProgressBar progressBar; // å›æ”¾è¿›åº¦æ¡
+        private bool extended = false; // æ‰©å±•æ–¹å—
+        #endregion ç§æœ‰å­—æ®µ
 
         /// <summary>
-        /// Ïû³ıµÄĞĞÊı
+        /// æ¶ˆé™¤çš„è¡Œæ•°
         /// </summary>
         public int Lines { get { return lines; } }
 
         /// <summary>
-        /// µ±Ç°µÄ»ı·Ö
+        /// å½“å‰çš„ç§¯åˆ†
         /// </summary>
         public int Score { get { return score; } }
 
         /// <summary>
-        /// µ±Ç°µÄ¹ØÊı
+        /// å½“å‰çš„å…³æ•°
         /// </summary>
         public int Level { get { return level; } }
 
         /// <summary>
-        /// ·½¿éµÄ²Ù×÷
+        /// æ–¹å—çš„æ“ä½œ
         /// </summary>
         public enum BrickOperates
         {
-            boMoveLeft = 0, // ×óÒÆ
-            boMoveRight = 1, // ÓÒÒÆ
-            boMoveDown = 2, // ÏÂÒÆ
-            boMoveBottom = 3, // Ö±ÏÂ
-            boTurnLeft = 4, // ×óĞı
-            boTurnRight = 5, // ÓÒĞı
+            boMoveLeft = 0, // å·¦ç§»
+            boMoveRight = 1, // å³ç§»
+            boMoveDown = 2, // ä¸‹ç§»
+            boMoveBottom = 3, // ç›´ä¸‹
+            boTurnLeft = 4, // å·¦æ—‹
+            boTurnRight = 5, // å³æ—‹
         }
 
         /// <summary>
-        /// Ò»¸ö²½ÖèµØĞÅÏ¢
+        /// ä¸€ä¸ªæ­¥éª¤åœ°ä¿¡æ¯
         /// </summary>
         public struct StepInfo
         {
-            public byte command; // Ö´ĞĞµÄÃüÁî 0: ³õÊ¼·½¿é 1:µÃµ½ÏÂÒ»¸öĞÎ×´ 2:ÒÆ¶¯·½¿é
-            public ushort timeTick; // ¸Ã²½Öè»¨µôµÄÊ±¼ä
-            public byte param1; // ²ÎÊı1
-            public byte param2; // ²ÎÊı2
+            public byte command; // æ‰§è¡Œçš„å‘½ä»¤ 0: åˆå§‹æ–¹å— 1:å¾—åˆ°ä¸‹ä¸€ä¸ªå½¢çŠ¶ 2:ç§»åŠ¨æ–¹å—
+            public ushort timeTick; // è¯¥æ­¥éª¤èŠ±æ‰çš„æ—¶é—´
+            public byte param1; // å‚æ•°1
+            public byte param2; // å‚æ•°2
             public StepInfo(int ATimeTick, byte ACommand, byte AParam1, byte AParam2)
             {
                 timeTick = (ushort)ATimeTick;
@@ -127,9 +123,9 @@ namespace youxi
             List<List<Point>> templets;
             List<Point> bricks;
 
-            #region Ìí¼ÓÄ¬ÈÏ·½¿éÄ£°åÊı¾İ
+            #region æ·»åŠ é»˜è®¤æ–¹å—æ¨¡æ¿æ•°æ®
             brickTemplets.Clear();
-            //Ìí¼ÓÕı·½ĞÎ
+            //æ·»åŠ æ­£æ–¹å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -141,7 +137,7 @@ namespace youxi
 
             brickTemplets.Add(templets);
 
-            //Ìí¼ÓTĞÎ
+            //æ·»åŠ Tå½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -173,7 +169,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //Ìí¼Ó×óLĞÎ
+            //æ·»åŠ å·¦Lå½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -205,7 +201,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //Ìí¼ÓÓÒLĞÎ
+            //æ·»åŠ å³Lå½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -237,7 +233,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //Ìí¼ÓÖ±Ìõ
+            //æ·»åŠ ç›´æ¡
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -255,7 +251,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //Ìí¼Ó×óZ
+            //æ·»åŠ å·¦Z
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -273,7 +269,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //Ìí¼ÓÓÒZ
+            //æ·»åŠ å³Z
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -290,17 +286,17 @@ namespace youxi
             bricks.Add(new Point(1, 1)); //[  ][  ][  ][  ]
             templets.Add(bricks);
             brickTemplets.Add(templets);
-            #endregion Ìí¼ÓÄ¬ÈÏ·½¿éÄ£°åÊı¾İ
+            #endregion æ·»åŠ é»˜è®¤æ–¹å—æ¨¡æ¿æ•°æ®
             if (!AExtended) return;
-            #region Ìí¼ÓÀ©Õ¹·½¿éÄ£°åÊı¾İ
-            //À©³ä"."ĞÎ
+            #region æ·»åŠ æ‰©å±•æ–¹å—æ¨¡æ¿æ•°æ®
+            //æ‰©å……"."å½¢
             templets = new List<List<Point>>();
             bricks = new List<Point>();
             bricks.Add(new Point(0, 0)); //[00][  ]
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³ä"-"ĞÎ
+            //æ‰©å……"-"å½¢
             templets = new List<List<Point>>();
             bricks = new List<Point>();
             bricks.Add(new Point(1, 0)); //[  ][10]
@@ -313,7 +309,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶ "v"ĞÎ
+            //æ‰©å……ç¤ºèŒƒ "v"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -341,7 +337,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶ "|"ĞÎ
+            //æ‰©å……ç¤ºèŒƒ "|"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -357,7 +353,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶ "E"ĞÎ
+            //æ‰©å……ç¤ºèŒƒ "E"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -393,7 +389,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶"T"ĞÎ
+            //æ‰©å……ç¤ºèŒƒ"T"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -429,7 +425,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶×ó"Z"ĞÎ
+            //æ‰©å……ç¤ºèŒƒå·¦"Z"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -449,7 +445,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶ÓÒ"Z"ĞÎ
+            //æ‰©å……ç¤ºèŒƒå³"Z"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -469,7 +465,7 @@ namespace youxi
             templets.Add(bricks);
             brickTemplets.Add(templets);
 
-            //À©³äÊ¾·¶ "+"ĞÎ
+            //æ‰©å……ç¤ºèŒƒ "+"å½¢
             templets = new List<List<Point>>();
 
             bricks = new List<Point>();
@@ -480,7 +476,7 @@ namespace youxi
             bricks.Add(new Point(1, 2));
             templets.Add(bricks);
             brickTemplets.Add(templets);
-            #endregion Ìí¼ÓÀ©Õ¹·½¿éÄ£°åÊı¾İ
+            #endregion æ·»åŠ æ‰©å±•æ–¹å—æ¨¡æ¿æ•°æ®
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -489,9 +485,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// ´ÓĞÂ¿ªÊ¼ÓÎÏ·
+        /// ä»æ–°å¼€å§‹æ¸¸æˆ
         /// </summary>
-        /// <param name="ARecordMode">ÊÇ·ñ¼ÇÂ¼Íæ¼ÒµÄ²Ù×÷</param>
+        /// <param name="ARecordMode">æ˜¯å¦è®°å½•ç©å®¶çš„æ“ä½œ</param>
         public void Replay(bool ARecordMode, bool AExtended)
         {
             if (threadReview != null)
@@ -528,7 +524,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// »Ø·Åµ½ÏÂÒ»²½
+        /// å›æ”¾åˆ°ä¸‹ä¸€æ­¥
         /// </summary>
         public void NextStep()
         {
@@ -568,7 +564,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// »Ø·ÅËÙ¶È
+        /// å›æ”¾é€Ÿåº¦
         /// </summary>
         public int ReviewSpeed 
         {
@@ -583,7 +579,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// Ö´ĞĞ»Ø·Å²Ù×÷
+        /// æ‰§è¡Œå›æ”¾æ“ä½œ
         /// </summary>
         private void DoReview()
         {
@@ -604,7 +600,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// ÔÚÏß³ÌÖĞ¿ØÖÆ½çÃæÓÃ
+        /// åœ¨çº¿ç¨‹ä¸­æ§åˆ¶ç•Œé¢ç”¨
         /// </summary>
         private void DoInvoke(object sender, EventArgs e)
         {
@@ -623,7 +619,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// »Ø·ÅÀúÊ·
+        /// å›æ”¾å†å²
         /// </summary>
         public void Review()
         {
@@ -649,7 +645,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// ÓÎÏ·½áÊø
+        /// æ¸¸æˆç»“æŸ
         /// </summary>
         public void GameOver()
         {
@@ -658,7 +654,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// ´¦ÀíÖØÒªĞÅÏ¢±ä»¯
+        /// å¤„ç†é‡è¦ä¿¡æ¯å˜åŒ–
         /// </summary>
         public void DoChange()
         {
@@ -673,7 +669,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// Çå¿Õ»­ÃæºÍµãÕóĞÅÏ¢
+        /// æ¸…ç©ºç”»é¢å’Œç‚¹é˜µä¿¡æ¯
         /// </summary>
         public void Clear()
         {
@@ -685,9 +681,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// ´ÓÎÄ¼şÖĞÔØÈëÍæ¼Ò²Ù×÷¼ÇÂ¼
+        /// ä»æ–‡ä»¶ä¸­è½½å…¥ç©å®¶æ“ä½œè®°å½•
         /// </summary>
-        /// <param name="AFileName">ÎÄ¼şÃû</param>
+        /// <param name="AFileName">æ–‡ä»¶å</param>
         public void LoadFromFile(string AFileName)
         {
             if (!File.Exists(AFileName)) return;
@@ -698,9 +694,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// ´ÓÁ÷ÖĞÔØÈëÍæ¼Ò²Ù×÷¼ÇÂ¼
+        /// ä»æµä¸­è½½å…¥ç©å®¶æ“ä½œè®°å½•
         /// </summary>
-        /// <param name="AStream">Á÷</param>
+        /// <param name="AStream">æµ</param>
         public void LoadFromStream(Stream AStream)
         {
             if (AStream == null) return;
@@ -711,7 +707,7 @@ namespace youxi
             if (rowCount != (byte)AStream.ReadByte()) return;
             if (threadReview != null)
             {
-                threadReview.Abort(); // Èç¹ûÕıÔÚ»Ø·Å
+                threadReview.Abort(); // å¦‚æœæ­£åœ¨å›æ”¾
                 threadReview = null;
             }
             timer.Enabled = false;
@@ -762,9 +758,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// ½«Íæ¼Ò²Ù×÷¼ÇÂ¼±£´æµ½ÎÄ¼şÖĞ
+        /// å°†ç©å®¶æ“ä½œè®°å½•ä¿å­˜åˆ°æ–‡ä»¶ä¸­
         /// </summary>
-        /// <param name="AFileName">ÎÄ¼şÃû</param>
+        /// <param name="AFileName">æ–‡ä»¶å</param>
         public void SaveToFile(string AFileName)
         {
             FileStream vFileStream = new FileStream(AFileName,
@@ -774,14 +770,14 @@ namespace youxi
         }
 
         /// <summary>
-        /// ½«Íæ¼Ò²Ù×÷¼ÇÂ¼±£´æµ½Á÷ÖĞ
+        /// å°†ç©å®¶æ“ä½œè®°å½•ä¿å­˜åˆ°æµä¸­
         /// </summary>
         /// <param name="AStream"></param>
         public void SaveToStream(Stream AStream)
         {
             if (AStream == null) return;
             byte[] vBuffer = Encoding.ASCII.GetBytes("trf");
-            AStream.Write(vBuffer, 0, vBuffer.Length); // Ğ´Í·ĞÅÏ¢
+            AStream.Write(vBuffer, 0, vBuffer.Length); // å†™å¤´ä¿¡æ¯
             AStream.WriteByte((byte)colCount);
             AStream.WriteByte((byte)rowCount);
             byte vByte = (byte)brickTemplets.Count;
@@ -812,11 +808,11 @@ namespace youxi
         }
 
         /// <summary>
-        /// »æÖÆÒ»¸öµãµÄ·½¿é
+        /// ç»˜åˆ¶ä¸€ä¸ªç‚¹çš„æ–¹å—
         /// </summary>
-        /// <param name="AGraphics">»æÖÆµÄÍ¼Ïñ</param>
-        /// <param name="APoint">»æÖÆµÄ×ø±ê</param>
-        /// <param name="ABrick">»æÖÆµÄ·½¿éÍ¼°¸£¬Èç¹ûÎª0Ôò±íÊ¾Çå³ı</param>
+        /// <param name="AGraphics">ç»˜åˆ¶çš„å›¾åƒ</param>
+        /// <param name="APoint">ç»˜åˆ¶çš„åæ ‡</param>
+        /// <param name="ABrick">ç»˜åˆ¶çš„æ–¹å—å›¾æ¡ˆï¼Œå¦‚æœä¸º0åˆ™è¡¨ç¤ºæ¸…é™¤</param>
         public void DrawPoint(Graphics AGraphics, Point APoint, byte ABrick)
         {
             if (ImageList == null) return;
@@ -835,9 +831,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// ´ÓĞÂ»æÖÆÕû¸öµãÕó
+        /// ä»æ–°ç»˜åˆ¶æ•´ä¸ªç‚¹é˜µ
         /// </summary>
-        /// <param name="AGraphics">»æÖÆµÄÍ¼Ïñ</param>
+        /// <param name="AGraphics">ç»˜åˆ¶çš„å›¾åƒ</param>
         public void DrawPoints(Graphics AGraphics)
         {
             if (ImageList == null) return;
@@ -848,10 +844,10 @@ namespace youxi
         }
 
         /// <summary>
-        /// »æÖÆµ±Ç°±»¿ØÖÆµÄ·½¿é
+        /// ç»˜åˆ¶å½“å‰è¢«æ§åˆ¶çš„æ–¹å—
         /// </summary>
-        /// <param name="AGraphics">ËùÒª»æÖÆµÄÍ¼Ïñ</param>
-        /// <param name="AClear">ÊÇ·ñ²ÉÓÃÇå³ı»æÖÆ</param>
+        /// <param name="AGraphics">æ‰€è¦ç»˜åˆ¶çš„å›¾åƒ</param>
+        /// <param name="AClear">æ˜¯å¦é‡‡ç”¨æ¸…é™¤ç»˜åˆ¶</param>
         public void DrawCurrent(Graphics AGraphics, bool AClear)
         {
             if (ImageList == null) return;
@@ -863,9 +859,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// »æÖÆÏÂÒ»¸ö³öÏÖµÄ·½¿é
+        /// ç»˜åˆ¶ä¸‹ä¸€ä¸ªå‡ºç°çš„æ–¹å—
         /// </summary>
-        /// <param name="AGraphics">»æÖÆµÄÍ¼Ïñ</param>
+        /// <param name="AGraphics">ç»˜åˆ¶çš„å›¾åƒ</param>
         public void DrawNext(Graphics AGraphics)
         {
             if (AGraphics == null) return;
@@ -877,9 +873,9 @@ namespace youxi
         }
 
         /// <summary>
-        /// »æÖÆ»ı·Ö¿ò
+        /// ç»˜åˆ¶ç§¯åˆ†æ¡†
         /// </summary>
-        /// <param name="AGraphics">Ëù»æÖÆÍ¼Ïñ</param>
+        /// <param name="AGraphics">æ‰€ç»˜åˆ¶å›¾åƒ</param>
         public void DrawScore(Graphics AGraphics)
         {
             if (AGraphics == null) return;
@@ -909,12 +905,12 @@ namespace youxi
         }
 
         /// <summary>
-        /// ¼ì²é·½¿éÊÇ·ñ¿ÉÒÔÒÆ¶¯»ò±ä»¯µ½´ËÎ»ÖÃ
+        /// æ£€æŸ¥æ–¹å—æ˜¯å¦å¯ä»¥ç§»åŠ¨æˆ–å˜åŒ–åˆ°æ­¤ä½ç½®
         /// </summary>
-        /// <param name="ABrickIndex">Ä£°åĞòºÅ</param>
-        /// <param name="AFacingIndex">³¯ÏòĞòºÅ</param>
-        /// <param name="ABrickPoint">Î»ÖÃ×ø±ê</param>
-        /// <returns>·µ»ØÊÇ·ñ¿ÉÒÔÒÆ¶¯</returns>
+        /// <param name="ABrickIndex">æ¨¡æ¿åºå·</param>
+        /// <param name="AFacingIndex">æœå‘åºå·</param>
+        /// <param name="ABrickPoint">ä½ç½®åæ ‡</param>
+        /// <returns>è¿”å›æ˜¯å¦å¯ä»¥ç§»åŠ¨</returns>
         public bool CheckBrick(byte ABrickIndex, byte AFacingIndex, Point ABrickPoint)
         {
             foreach (Point vPoint in brickTemplets[ABrickIndex][AFacingIndex])
@@ -930,19 +926,19 @@ namespace youxi
         }
 
         /// <summary>
-        /// ÏûĞĞ
+        /// æ¶ˆè¡Œ
         /// </summary>
         public void FreeLine()
         {
             int vFreeCount = 0;
             for (int j = rowCount - 1; j >= 0; j--)
             {
-                bool vExistsFull = true; // ÊÇ·ñ´æÔÚÂúĞĞ
+                bool vExistsFull = true; // æ˜¯å¦å­˜åœ¨æ»¡è¡Œ
                 for (int i = 0; i < colCount && vExistsFull; i++)
                     if (points[i, j] == 0)
                         vExistsFull = false;
                 if (!vExistsFull) continue;
-                #region Í¼Æ¬ÏÂÒÆ
+                #region å›¾ç‰‡ä¸‹ç§»
                 Graphics vGraphics = Graphics.FromImage(backBitmap);
                 Rectangle srcRect = new Rectangle(0, 0, backBitmap.Width, j * brickHeight);
                 Rectangle destRect = srcRect;
@@ -952,7 +948,7 @@ namespace youxi
                 vGraphics.DrawImage(vBitmap, destRect, srcRect, GraphicsUnit.Pixel);
                 vGraphics.FillRectangle(new SolidBrush(BackColor), 0, 0,
                     backBitmap.Width, brickHeight);
-                #endregion Í¼Æ¬ÏÂÒÆ
+                #endregion å›¾ç‰‡ä¸‹ç§»
                 lines++;
                 vFreeCount++;
                 for (int k = j; k >= 0; k--)
@@ -975,10 +971,10 @@ namespace youxi
         }
 
         /// <summary>
-        /// Ö´ĞĞÒ»¸ö±ä»¯²Ù×÷
+        /// æ‰§è¡Œä¸€ä¸ªå˜åŒ–æ“ä½œ
         /// </summary>
-        /// <param name="ABrickOperates">±ä»¯Ö¸Áî</param>
-        /// <returns>·µ»ØÊÇ·ñ±ä»¯</returns>
+        /// <param name="ABrickOperates">å˜åŒ–æŒ‡ä»¤</param>
+        /// <returns>è¿”å›æ˜¯å¦å˜åŒ–</returns>
         public bool BrickOperate(BrickOperates ABrickOperates)
         {
 
@@ -1043,7 +1039,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// µÃµ½ÏÂÒ»¸ö·½¿é
+        /// å¾—åˆ°ä¸‹ä¸€ä¸ªæ–¹å—
         /// </summary>
         private void NextBrick()
         {
@@ -1074,7 +1070,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// µ±Ç°·½¿éÂäµ×
+        /// å½“å‰æ–¹å—è½åº•
         /// </summary>
         private void Downfall()
         {
@@ -1196,7 +1192,7 @@ namespace youxi
         }
 
         /// <summary>
-        /// »Ø·Å½ø¶ÈÌõ
+        /// å›æ”¾è¿›åº¦æ¡
         /// </summary>
         public ProgressBar ProgressBar
         {
@@ -1254,27 +1250,27 @@ namespace youxi
             if (!playing || reviewing) return;
             switch (e.KeyCode)
             {
-                case Keys.A: // ×óÒÆ
+                case Keys.A: // å·¦ç§»
                 case Keys.Left:
                     BrickOperate(BrickOperates.boMoveLeft);
                     break;
-                case Keys.D: // ÓÒÒÆ
+                case Keys.D: // å³ç§»
                 case Keys.Right:
                     BrickOperate(BrickOperates.boMoveRight);
                     break;
-                case Keys.W: // ±ä»¯1
+                case Keys.W: // å˜åŒ–1
                 case Keys.Up:
                     BrickOperate(BrickOperates.boTurnLeft);
                     break;
-                case Keys.Back: // ±ä»¯2
+                case Keys.Back: // å˜åŒ–2
                 case Keys.F:
                     BrickOperate(BrickOperates.boTurnRight);
                     break;
-                case Keys.Down: // ÏòÏÂ
+                case Keys.Down: // å‘ä¸‹
                 case Keys.S:
                     BrickOperate(BrickOperates.boMoveDown);
                     break;
-                case Keys.Enter: // Ö±ÏÂ
+                case Keys.Enter: // ç›´ä¸‹
                 case Keys.Space:
                 case Keys.End:
                 case Keys.J:
@@ -1285,7 +1281,7 @@ namespace youxi
     }
 
     /// <summary>
-    /// ÏÔÊ¾ÏÂÒ»¸ö³öÏÖµÄ·½¿é¿Ø¼ş
+    /// æ˜¾ç¤ºä¸‹ä¸€ä¸ªå‡ºç°çš„æ–¹å—æ§ä»¶
     /// </summary>
     public class youxiNext : Control
     {
@@ -1326,7 +1322,7 @@ namespace youxi
     }
 
     /// <summary>
-    /// ÏÔÊ¾»ı·ÖĞÅÏ¢µÄ¿Ø¼ş
+    /// æ˜¾ç¤ºç§¯åˆ†ä¿¡æ¯çš„æ§ä»¶
     /// </summary>
     public class youxiScore : Control
     {

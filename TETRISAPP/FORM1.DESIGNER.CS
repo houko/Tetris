@@ -1,4 +1,4 @@
-﻿namespace youxiApp
+﻿namespace TetrisApp
 {
     partial class Form1
     {
