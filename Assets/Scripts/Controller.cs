@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /**
 *  作   者 ：胡朋
@@ -9,13 +7,14 @@ using UnityEngine;
 */
 public class Controller : MonoBehaviour
 {
+    [HideInInspector] public Model model;
 
-	public Model model;
+    [HideInInspector] public View view;
 
-	public View view;
-	
-	
-	
-	
 
+    private void Start()
+    {
+        model = GameObject.FindWithTag("Model").GetComponent<Model>();
+        view = GameObject.FindWithTag("View").GetComponent<View>();
+    }
 }
