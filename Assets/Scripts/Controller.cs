@@ -13,22 +13,21 @@ public class Controller : MonoBehaviour
 
     private FSMSystem fsm;
 
-    private void Awake()
+    private void Start()
     {
         fsm = new FSMSystem();
-       FSMState[] fsmStates =  GetComponents<FSMState>();
+        FSMState[] fsmStates = GetComponentsInChildren<FSMState>();
         foreach (var state in fsmStates)
         {
-            fsm.AddState(state);
+            fsm.AddState(state, this);
         }
 
-        MenuState menuState = GetComponent<MenuState>();
+        MenuState menuState = GetComponentInChildren<MenuState>();
         fsm.setCurrentState(menuState);
     }
 
 
-
-    private void Start()
+    private void Awake()
     {
         model = GameObject.FindWithTag("Model").GetComponent<Model>();
         view = GameObject.FindWithTag("View").GetComponent<View>();

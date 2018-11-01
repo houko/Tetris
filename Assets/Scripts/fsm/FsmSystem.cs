@@ -38,6 +38,14 @@ public abstract class FSMState : MonoBehaviour
 
     protected FSMSystem fsm;
 
+    protected Controller ctrl;
+
+    public Controller Ctrl
+    {
+        get { return ctrl; }
+        set { ctrl = value; }
+    }
+
     public FSMSystem Fsm
     {
         set { fsm = value; }
@@ -175,6 +183,7 @@ public class FSMSystem
     {
         currentState = fsmState;
         currentStateID = fsmState.ID;
+        currentState.DoBeforeEntering();
     }
 
     /// <summary>
@@ -182,7 +191,7 @@ public class FSMSystem
     /// or prints an ERROR message if the state was already inside the List.
     /// First state added is also the initial state.
     /// </summary>
-    public void AddState(FSMState s)
+    public void AddState(FSMState s,Controller ctrl)
     {
         if (s == null)
         {
@@ -190,6 +199,8 @@ public class FSMSystem
         }
 
         s.Fsm = this;
+        s.Ctrl = ctrl;
+        
         if (states.Count == 0)
         {
             states.Add(s);
