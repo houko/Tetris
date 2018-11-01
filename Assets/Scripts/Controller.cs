@@ -11,6 +11,22 @@ public class Controller : MonoBehaviour
 
     [HideInInspector] public View view;
 
+    private FSMSystem fsm;
+
+    private void Awake()
+    {
+        fsm = new FSMSystem();
+       FSMState[] fsmStates =  GetComponents<FSMState>();
+        foreach (var state in fsmStates)
+        {
+            fsm.AddState(state);
+        }
+
+        MenuState menuState = GetComponent<MenuState>();
+        fsm.setCurrentState(menuState);
+    }
+
+
 
     private void Start()
     {
