@@ -10,8 +10,14 @@ public class Controller : MonoBehaviour
     [HideInInspector] public Model model;
 
     [HideInInspector] public View view;
+    
+    [HideInInspector] public CameraManager cameraManager;
+    
+    [HideInInspector] public TetrisGameManager tetrisGameManager;
 
     private FSMSystem fsm;
+    
+
 
     private void Start()
     {
@@ -31,5 +37,7 @@ public class Controller : MonoBehaviour
     {
         model = GameObject.FindWithTag("Model").GetComponent<Model>();
         view = GameObject.FindWithTag("View").GetComponent<View>();
+        cameraManager = GetComponent<CameraManager>();
+        tetrisGameManager = GetComponent<TetrisGameManager>();
     }
 }

@@ -8,6 +8,8 @@ using UnityEngine;
 public enum Transition
 {
     NullTransition = 0,
+    StartButtonClicked = 1,
+    PauseButtonClicked = 2
 }
 
 /// <summary>
@@ -191,7 +193,7 @@ public class FSMSystem
     /// or prints an ERROR message if the state was already inside the List.
     /// First state added is also the initial state.
     /// </summary>
-    public void AddState(FSMState s,Controller ctrl)
+    public void AddState(FSMState s, Controller ctrl)
     {
         if (s == null)
         {
@@ -200,7 +202,7 @@ public class FSMSystem
 
         s.Fsm = this;
         s.Ctrl = ctrl;
-        
+
         if (states.Count == 0)
         {
             states.Add(s);
