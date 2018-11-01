@@ -5,9 +5,9 @@ using UnityEngine;
 /**
 *  作   者 ：胡朋
 *  github : https://github.com/xiaomoinfo
-*  描   述 ：
+*  描   述 ：模型
 */
-public class Test : MonoBehaviour {
+public class Model : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
