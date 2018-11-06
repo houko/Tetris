@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class TetrisGameManager : MonoBehaviour
 {
-    /**
-     * 是否是暂停
-     */
-    public bool isPause = true;
-
     public Shape[] shapes;
 
     public Color[] colors;
@@ -30,18 +25,18 @@ public class TetrisGameManager : MonoBehaviour
 
     public void StartGame()
     {
-        isPause = false;
+        GameContext.isPause = false;
     }
 
 
     public void PauseGame()
     {
-        isPause = true;
+        GameContext.isPause = true;
     }
 
     private void Update()
     {
-        if (isPause)
+        if (GameContext.isPause)
         {
             return;
         }
