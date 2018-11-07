@@ -9,26 +9,23 @@ using UnityEngine;
 */
 public class Model : MonoBehaviour
 {
-    public Transform[,] map = new Transform[10, 23];
-
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    public Transform[,] map = new Transform[10, 18];
 
 
     public bool IsValidMapPosition(Transform t)
     {
-//        foreach (var VARIABLE in t.)
-//        {
-//            
-//        }
+        foreach (Transform child in t)
+        {
+            if (child.CompareTag("Block"))
+            {
+                Vector2 pos = child.position.Round();
+                if (map[(int) pos.x, (int) pos.y] == null)
+                {
+                    
+                }
+            }
+        }
+
         return false;
     }
 }
