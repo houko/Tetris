@@ -55,7 +55,7 @@ public class Model : MonoBehaviour
     /// <returns></returns>
     public bool isInsideMap(Vector2 pos)
     {
-        return pos.x >= 0 && pos.x < column && pos.y > 0;
+        return pos.x >= 0 && pos.x < column && pos.y >= 0;
     }
 
 
