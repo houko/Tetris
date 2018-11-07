@@ -72,11 +72,6 @@ public class Model : MonoBehaviour
                 return;
             }
 
-            if (child.position.y > 15)
-            {
-                return;
-            }
-
             Vector2 pos = child.position.Round();
             map[(int) pos.x, (int) pos.y] = child;
         }
