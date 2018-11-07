@@ -17,7 +17,7 @@ public class TetrisGameManager : MonoBehaviour
     {
         int shapeIndex = Random.Range(0, shapes.Length);
         int colorIndex = Random.Range(0, colors.Length);
-        Shape shape = Instantiate(shapes[shapeIndex], new Vector3(4, 20, 0), Quaternion.identity);
+        Shape shape = Instantiate(shapes[shapeIndex], new Vector3(3, 16, 0), Quaternion.identity);
         shape.Init(colors[colorIndex]);
         currentShape = shape;
     }
