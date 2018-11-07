@@ -50,7 +50,7 @@ public class View : MonoBehaviour
     public void ShowGame()
     {
         gameUI.gameObject.SetActive(true);
-        gameUI.DOAnchorPosY(75f, 0.5f);
+        gameUI.DOAnchorPosY(-61f, 0.5f);
     }
 
     public void HideGame()
