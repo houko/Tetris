@@ -32,10 +32,10 @@ public class View : MonoBehaviour
     public void ShowMenu()
     {
         logoName.gameObject.SetActive(true);
-        logoName.DOAnchorPosY(586f, 0.5f);
+        logoName.DOAnchorPosY(439.5f, 0.5f);
 
         menUI.gameObject.SetActive(true);
-        menUI.DOAnchorPosY(-77f, 0.5f);
+        menUI.DOAnchorPosY(76.5f, 0.5f);
     }
 
     public void HideMenu()
