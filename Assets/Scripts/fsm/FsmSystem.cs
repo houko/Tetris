@@ -9,7 +9,8 @@ public enum Transition
 {
     NullTransition = 0,
     StartButtonClicked = 1,
-    PauseButtonClicked = 2
+    PauseButtonClicked = 2,
+    RestartButtonClicked = 3,
 }
 
 /// <summary>
@@ -22,7 +23,8 @@ public enum StateID
     Play = 1,
     Menu = 2,
     Pause = 3,
-    GameOver = 4
+    GameOver = 4,
+    Restart = 5,
 }
 
 /// <summary>
