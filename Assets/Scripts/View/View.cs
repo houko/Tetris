@@ -17,7 +17,7 @@ public class View : MonoBehaviour
     private RectTransform pauseUI;
 
 
-    private void Start()
+    private void Awake()
     {
         logoName = transform.Find("Canvas/Logo") as RectTransform;
 
