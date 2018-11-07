@@ -8,13 +8,13 @@ public class MenuState : FSMState
 
         public override void DoBeforeEntering()
         {
-            ctrl.view.ShowMenu();
+            ctrl.view.ShowMenuUI();
             ctrl.cameraManager.ZoomIn();
         }
 
         public override void DoBeforeLeaving()
         {
-            ctrl.view.HideMenu();
+            ctrl.view.HideMenuUI();
         }
 
         /// <summary>

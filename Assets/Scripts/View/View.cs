@@ -15,6 +15,7 @@ public class View : MonoBehaviour
     private RectTransform gameOverUI;
     private RectTransform settingUI;
     private RectTransform pauseUI;
+    private RectTransform restartButton;
 
 
     private void Awake()
@@ -26,10 +27,14 @@ public class View : MonoBehaviour
         gameOverUI = transform.Find("Canvas/GameOverUI") as RectTransform;
         settingUI = transform.Find("Canvas/SettingUI") as RectTransform;
         pauseUI = transform.Find("Canvas/PauseUI") as RectTransform;
+        restartButton = transform.Find("Canvas/MenuUI/Restart") as RectTransform;
     }
 
 
-    public void ShowMenu()
+    /// <summary>
+    /// 显示菜单UI
+    /// </summary>
+    public void ShowMenuUI()
     {
         logoName.gameObject.SetActive(true);
         logoName.DOAnchorPosY(439.5f, 0.5f);
@@ -38,24 +43,45 @@ public class View : MonoBehaviour
         menUI.DOAnchorPosY(76.5f, 0.5f);
     }
 
-    public void HideMenu()
+    /// <summary>
+    /// 隐藏菜单ui
+    /// </summary>
+    public void HideMenuUI()
     {
         logoName.DOAnchorPosY(640f, 0.5f)
             .OnComplete(delegate { logoName.gameObject.SetActive(false); });
-        
+
         menUI.DOAnchorPosY(-95f, 0.5f)
             .OnComplete(delegate { menUI.gameObject.SetActive(false); });
     }
 
-    public void ShowGame()
+    /// <summary>
+    /// 显示游戏分数UI
+    /// </summary>
+    public void ShowGameUI()
     {
         gameUI.gameObject.SetActive(true);
         gameUI.DOAnchorPosY(-61f, 0.5f);
     }
 
-    public void HideGame()
+    /// <summary>
+    /// 隐藏游戏分数UI
+    /// </summary>
+    public void HideGameUI()
     {
         gameUI.DOAnchorPosY(-70f, 0.5f)
             .OnComplete(delegate { gameUI.gameObject.SetActive(false); });
+    }
+    
+    
+    public void HideRestartButton()
+    {
+        restartButton.gameObject.SetActive(false);
+    }
+    
+
+    public void ShowRestartButton()
+    {
+        restartButton.gameObject.SetActive(true);
     }
 }
