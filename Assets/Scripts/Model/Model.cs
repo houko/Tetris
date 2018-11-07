@@ -29,31 +29,56 @@ public class Model : MonoBehaviour
                 continue;
             }
 
-            // 格子不能重叠
             Vector2 pos = child.position.Round();
-            if (map[(int) pos.x, (int) pos.y] != null)
+
+            // 格子不能超出地图范围
+            if (!isInsideMap(pos))
             {
                 return false;
             }
 
-            // 格子不能超出地图范围
-            if (isInsideMap(pos))
+            // 格子不能重叠
+            if (map[(int) pos.x, (int) pos.y] != null)
             {
                 return false;
             }
         }
 
-        return false;
+        return true;
     }
 
 
     /// <summary>
-    /// 是否在地图内
+    /// 是否在地图内，不能超出左右下边界
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>
     public bool isInsideMap(Vector2 pos)
     {
-        return pos.x >= 0 && pos.y > 0 && pos.x < column && pos.y < row;
+        return pos.x >= 0 && pos.x < column && pos.y > 0;
+    }
+
+
+    /// <summary>
+    /// 摆放shape
+    /// </summary>
+    /// <param name="t"></param>
+    public void PlaceShape(Transform t)
+    {
+        foreach (Transform child in t)
+        {
+            if (!child.CompareTag("Block"))
+            {
+                return;
+            }
+
+            if (child.position.y > 15)
+            {
+                return;
+            }
+
+            Vector2 pos = child.position.Round();
+            map[(int) pos.x, (int) pos.y] = child;
+        }
     }
 }

@@ -3,9 +3,15 @@ using UnityEngine;
 
 public class Shape : MonoBehaviour
 {
+    [HideInInspector] public Controller controller;
+
+    [HideInInspector] public TetrisGameManager gameManager;
+
     public float timeInterval = 0.5f;
 
     public float timeInv = 0;
+
+    private bool pause = false;
 
     public void Init(Color color)
     {
@@ -28,8 +34,25 @@ public class Shape : MonoBehaviour
         timeInv += Time.deltaTime;
         if (timeInv >= timeInterval)
         {
-            transform.position = transform.position - new Vector3(0, 1, 0);
-            timeInv = 0;
+            Fall();
+        }
+    }
+
+    private void Fall()
+    {
+        if (pause)
+        {
+            return;
+        }
+
+        transform.position = transform.position - new Vector3(0, 1, 0);
+        timeInv = 0;
+
+        if (!controller.model.IsValidMapPosition(transform))
+        {
+            pause = true;
+            transform.position = transform.position + new Vector3(0, 1, 0);
+            gameManager.FallDown(transform);
         }
     }
 }
