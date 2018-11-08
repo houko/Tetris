@@ -35,10 +35,11 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        if (audioSource.isPlaying)
-        {
-            return;
-        }
+        // 这里音效播完有很长一段静音，所以不判断是否在播放中
+//        if (audioSource.isPlaying)
+//        {
+//            return;
+//        }
 
         audioSource.clip = audioClip;
         audioSource.Play();

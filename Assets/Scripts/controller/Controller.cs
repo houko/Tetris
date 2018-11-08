@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 /**
@@ -49,6 +50,7 @@ public class Controller : MonoBehaviour
     {
         GameContext.GameOver = false;
         view.HideGameOverUI();
+
         Transform[,] modelMap = model.map;
         for (int i = 0; i < 10; i++)
         {
@@ -62,5 +64,14 @@ public class Controller : MonoBehaviour
                 }
             }
         }
+
+        if (gameManager.currentShape)
+        {
+            Destroy(gameManager.currentShape.gameObject);
+            gameManager.currentShape = null;
+        }
+
+
+        fsm.PerformTransition(Transition.StartButtonClicked);
     }
 }

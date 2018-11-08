@@ -8,14 +8,16 @@ using UnityEngine;
 */
 public class View : MonoBehaviour
 {
+
     private RectTransform logoName;
 
     private RectTransform menUI;
     private RectTransform gameUI;
     private RectTransform gameOverUI;
     private RectTransform settingUI;
-    private RectTransform pauseUI;
     private RectTransform restartButton;
+    private RectTransform pauseButton;
+    private RectTransform audioButton;
 
 
     private void Awake()
@@ -26,8 +28,9 @@ public class View : MonoBehaviour
         gameUI = transform.Find("Canvas/GameUI") as RectTransform;
         gameOverUI = transform.Find("Canvas/GameOverUI") as RectTransform;
         settingUI = transform.Find("Canvas/SettingUI") as RectTransform;
-        pauseUI = transform.Find("Canvas/PauseUI") as RectTransform;
         restartButton = transform.Find("Canvas/MenuUI/Restart") as RectTransform;
+        pauseButton = transform.Find("Canvas/MenuUI/Pause") as RectTransform;
+        audioButton = transform.Find("Canvas/SettingUI/Background/Audio/Volume/Mute") as RectTransform;
     }
 
 
@@ -83,6 +86,7 @@ public class View : MonoBehaviour
     public void ShowRestartButton()
     {
         restartButton.gameObject.SetActive(true);
+        pauseButton.gameObject.SetActive(false);
     }
 
     public void showGameOverUI()
@@ -95,4 +99,25 @@ public class View : MonoBehaviour
     {
         gameOverUI.gameObject.SetActive(false);
     }
+    
+    
+    public void showSettingUI()
+    {
+        settingUI.gameObject.SetActive(true);
+    }
+
+
+    public void HideSettingUI()
+    {
+        settingUI.gameObject.SetActive(false);
+    }
+
+
+    public void ToggleAudioButton()
+    {
+        GameContext.Mute = !GameContext.Mute;
+        audioButton.gameObject.SetActive(GameContext.Mute);
+    }
+    
+    
 }

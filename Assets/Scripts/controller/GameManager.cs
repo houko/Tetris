@@ -44,6 +44,13 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void ToggleAudio()
+    {
+        controller.view.ToggleAudioButton();
+        controller.audioManager.PlayCursor();
+    }
+
+
     /// <summary>
     /// 落地
     /// </summary>
