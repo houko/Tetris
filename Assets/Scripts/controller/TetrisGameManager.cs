@@ -51,6 +51,12 @@ public class TetrisGameManager : MonoBehaviour
     {
         currentShape = null;
         controller.model.PlaceShape(pos);
+        GameObject[] findGameObjectsWithTag = GameObject.FindGameObjectsWithTag("Block");
+        foreach (var block in findGameObjectsWithTag)
+        {
+            block.GetComponent<SpriteRenderer>().color = Color.grey;
+        }
+
         CheckEnd();
     }
 
