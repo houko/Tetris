@@ -10,13 +10,12 @@ public class Controller : MonoBehaviour
     [HideInInspector] public Model model;
 
     [HideInInspector] public View view;
-    
+
     [HideInInspector] public CameraManager cameraManager;
-    
+
     [HideInInspector] public TetrisGameManager tetrisGameManager;
 
     private FSMSystem fsm;
-    
 
 
     private void Start()
@@ -39,5 +38,25 @@ public class Controller : MonoBehaviour
         view = GameObject.FindWithTag("View").GetComponent<View>();
         cameraManager = GetComponent<CameraManager>();
         tetrisGameManager = GetComponent<TetrisGameManager>();
+    }
+
+
+    public void Restart()
+    {
+        GameContext.GameOver = false;
+        view.HideGameOverUI();
+        Transform[,] modelMap = model.map;
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 18; j++)
+            {
+                Transform shape = modelMap[i, j];
+                if (shape)
+                {
+                    Destroy(shape.gameObject);
+                    modelMap[i, j] = null;
+                }
+            }
+        }
     }
 }

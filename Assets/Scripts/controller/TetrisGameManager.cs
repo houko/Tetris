@@ -7,7 +7,7 @@ public class TetrisGameManager : MonoBehaviour
 
     public Color[] colors;
 
-    private Shape currentShape;
+    [HideInInspector] public Shape currentShape;
 
     private Controller controller;
 
@@ -51,10 +51,32 @@ public class TetrisGameManager : MonoBehaviour
     {
         currentShape = null;
         controller.model.PlaceShape(pos);
+        CheckEnd();
+    }
+
+    private void CheckEnd()
+    {
+        Transform[,] modelMap = controller.model.map;
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 15; j < 18; j++)
+            {
+                if (modelMap[i, j] != null)
+                {
+                    GameContext.GameOver = true;
+                }
+            }
+        }
     }
 
     private void Update()
     {
+        if (GameContext.GameOver)
+        {
+            controller.view.showGameOverUI();
+            return;
+        }
+
         if (GameContext.isPause)
         {
             return;

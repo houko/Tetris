@@ -72,16 +72,27 @@ public class View : MonoBehaviour
         gameUI.DOAnchorPosY(-70f, 0.5f)
             .OnComplete(delegate { gameUI.gameObject.SetActive(false); });
     }
-    
-    
+
+
     public void HideRestartButton()
     {
         restartButton.gameObject.SetActive(false);
     }
-    
+
 
     public void ShowRestartButton()
     {
         restartButton.gameObject.SetActive(true);
+    }
+
+    public void showGameOverUI()
+    {
+        gameOverUI.gameObject.SetActive(true);
+    }
+
+
+    public void HideGameOverUI()
+    {
+        gameOverUI.gameObject.SetActive(false);
     }
 }
