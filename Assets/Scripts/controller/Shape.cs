@@ -7,7 +7,7 @@ public class Shape : MonoBehaviour
 
     [HideInInspector] public TetrisGameManager gameManager;
 
-    public float timeInterval = 0.5f;
+    public float timeInterval = 5f;
 
     public float timeInv = 0;
 
@@ -54,5 +54,7 @@ public class Shape : MonoBehaviour
             transform.position = transform.position + new Vector3(0, 1, 0);
             gameManager.FallDown(transform);
         }
+
+        controller.audioManager.PlayerFall();
     }
 }

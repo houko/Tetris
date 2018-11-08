@@ -15,6 +15,8 @@ public class Controller : MonoBehaviour
 
     [HideInInspector] public TetrisGameManager tetrisGameManager;
 
+    [HideInInspector] public AudioManager audioManager;
+
     private FSMSystem fsm;
 
 
@@ -36,6 +38,7 @@ public class Controller : MonoBehaviour
     {
         model = GameObject.FindWithTag("Model").GetComponent<Model>();
         view = GameObject.FindWithTag("View").GetComponent<View>();
+        audioManager = GetComponent<AudioManager>();
         cameraManager = GetComponent<CameraManager>();
         tetrisGameManager = GetComponent<TetrisGameManager>();
     }

@@ -169,6 +169,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8e6f4c1f1f14f63a768d1305acff928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  gameManager: {fileID: 0}
+  timeInterval: 0.5
+  timeInv: 0
 --- !u!212 &212351951505038988
 SpriteRenderer:
   m_ObjectHideFlags: 1

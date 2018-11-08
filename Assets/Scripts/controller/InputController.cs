@@ -30,10 +30,10 @@ public class InputController : MonoBehaviour
         // 变形
         if (Input.GetKeyDown(KeyCode.W))
         {
-            shapeTransform.RotateAround(pivot.transform.position, Vector3.forward, 90);
+            shapeTransform.RotateAround(pivot.transform.position, Vector3.forward, -90);
             if (!controller.model.IsValidMapPosition(shapeTransform))
             {
-                shapeTransform.RotateAround(pivot.transform.position, Vector3.forward, -90);
+                shapeTransform.RotateAround(pivot.transform.position, Vector3.forward, 90);
             }
         }
         // 下落

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,7 +39,19 @@ public class Model : MonoBehaviour
             }
 
             // 格子不能重叠
-            if (map[(int) pos.x, (int) pos.y] != null)
+            Transform shape = null;
+
+            try
+            {
+                shape = map[(int) pos.x, (int) pos.y];
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(string.Format("格子:{0}:{1}超出边界", (int) pos.x, (int) pos.y));
+            }
+
+
+            if (shape != null)
             {
                 return false;
             }
