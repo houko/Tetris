@@ -14,7 +14,7 @@ public class Controller : MonoBehaviour
 
     [HideInInspector] public CameraManager cameraManager;
 
-    [FormerlySerializedAs("tetrisGameManager")] [HideInInspector] public GameManager GameManager;
+    [HideInInspector] public GameManager gameManager;
 
     [HideInInspector] public AudioManager audioManager;
 
@@ -41,7 +41,7 @@ public class Controller : MonoBehaviour
         view = GameObject.FindWithTag("View").GetComponent<View>();
         audioManager = GetComponent<AudioManager>();
         cameraManager = GetComponent<CameraManager>();
-        GameManager = GetComponent<GameManager>();
+        gameManager = GetComponent<GameManager>();
     }
 
 
