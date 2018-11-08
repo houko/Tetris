@@ -5,7 +5,7 @@ public class Shape : MonoBehaviour
 {
     [HideInInspector] public Controller controller;
 
-    [HideInInspector] public TetrisGameManager gameManager;
+    [HideInInspector] public GameManager gameManager;
 
     public float timeInterval = 5f;
 

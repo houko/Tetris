@@ -10,7 +10,7 @@ public class PlayState : FSMState
     {
         ctrl.view.ShowGameUI();
         ctrl.cameraManager.ZoomOut();
-        ctrl.tetrisGameManager.StartGame();
+        ctrl.GameManager.StartGame();
     }
 
     public override void DoBeforeLeaving()

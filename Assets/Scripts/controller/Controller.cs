@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 /**
 *  作   者 ：胡朋
@@ -13,7 +14,7 @@ public class Controller : MonoBehaviour
 
     [HideInInspector] public CameraManager cameraManager;
 
-    [HideInInspector] public TetrisGameManager tetrisGameManager;
+    [FormerlySerializedAs("tetrisGameManager")] [HideInInspector] public GameManager GameManager;
 
     [HideInInspector] public AudioManager audioManager;
 
@@ -40,7 +41,7 @@ public class Controller : MonoBehaviour
         view = GameObject.FindWithTag("View").GetComponent<View>();
         audioManager = GetComponent<AudioManager>();
         cameraManager = GetComponent<CameraManager>();
-        tetrisGameManager = GetComponent<TetrisGameManager>();
+        GameManager = GetComponent<GameManager>();
     }
 
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class TetrisGameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public Shape[] shapes;
 

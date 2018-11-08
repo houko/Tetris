@@ -6,14 +6,14 @@ public class InputController : MonoBehaviour
 {
     private Controller controller;
 
-    private TetrisGameManager gameManager;
+    private GameManager gameManager;
 
     private Transform pivot;
 
     private void Awake()
     {
         controller = GetComponent<Controller>();
-        gameManager = GetComponent<TetrisGameManager>();
+        gameManager = GetComponent<GameManager>();
     }
 
     void Update()
