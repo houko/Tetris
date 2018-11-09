@@ -1,9 +1,9 @@
 # 俄罗斯方块
 
-![](screenshot/1.png)
-![](screenshot/2.png)
-![](screenshot/3.png)
-![](screenshot/4.png)
+![1](screenshot/1.png){:height="50%" width="50%"}
+![2](screenshot/2.png){:height="50%" width="50%"}
+![3](screenshot/3.png){:height="50%" width="50%"}
+![4](screenshot/4.png){:height="50%" width="50%"}
 
 ---
 
