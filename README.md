@@ -1,6 +1,6 @@
 # 俄罗斯方块
 
-![1](screenshot/1.png)
+![1](screenshot/screenshot.png)
 
 ---
 
