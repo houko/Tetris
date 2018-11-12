@@ -43,7 +43,7 @@ TextureImporter:
     21300076: SkardFlatAtlas_15
     21300078: SkardFlatAtlas_16
     21300080: SkardFlatAtlas_17
-    21300082: SkardFlatAtlas_18
+    21300082: Star
     21300084: SkardFlatAtlas_19
     21300086: SkardFlatAtlas_20
     21300088: SkardFlatAtlas_21
@@ -394,7 +394,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SkardFlatAtlas_18
+      name: Star
       rect:
         serializedVersion: 2
         x: 189
